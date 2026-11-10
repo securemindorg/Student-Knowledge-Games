@@ -1,0 +1,1004 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Utica University Cybersecurity Jeopardy: Open House Edition</title>
+    <style>
+        :root {
+            --utica-navy: #070d1b;
+            --utica-orange: #E65300;
+            --bg-color: #040812;
+            --card-bg: #0c162d;
+            --text-main: #f1f5f9;
+            --text-muted: #94a3b8;
+            --border: #1e293b;
+            --jeopardy-blue: #0b1930;
+            --jeopardy-gold: #00f0ff;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            margin: 0;
+            padding: 20px;
+            line-height: 1.5;
+            background-image: linear-gradient(rgba(7, 13, 27, 0.92), rgba(4, 8, 18, 0.92)),
+                              radial-gradient(circle at 50% 50%, rgba(0, 240, 255, 0.05) 0%, transparent 80%);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        /* Side Banners for Students & Events */
+        .side-banner {
+            position: fixed;
+            top: 80px;
+            bottom: 20px;
+            width: 200px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            overflow-y: auto;
+            z-index: 5;
+            padding: 5px;
+        }
+
+        .left-banner {
+            left: 10px;
+        }
+
+        .right-banner {
+            right: 10px;
+        }
+
+        .side-banner img {
+            width: 100%;
+            height: 140px;
+            object-fit: cover;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+            transition: transform 0.2s, border-color 0.2s;
+        }
+
+        .side-banner img:hover {
+            transform: scale(1.05);
+            border-color: var(--jeopardy-gold);
+        }
+
+        /* Hide side banners automatically on smaller viewports */
+        @media (max-width: 1500px) {
+            .side-banner {
+                display: none;
+            }
+        }
+
+        /* Top Right Controls Container */
+        .top-controls {
+            position: absolute;
+            top: 0;
+            right: 0;
+            display: flex;
+            gap: 10px;
+            z-index: 10;
+        }
+
+        .top-btn {
+            background-color: var(--utica-orange);
+            color: white;
+            padding: 10px 18px;
+            border-radius: 8px;
+            font-weight: 600;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 2px 10px rgba(230, 83, 0, 0.3);
+            transition: background-color 0.2s, transform 0.1s;
+            font-size: 0.9rem;
+            border: none;
+            cursor: pointer;
+        }
+
+        .top-btn:hover {
+            background-color: #c44500;
+            transform: translateY(-1px);
+        }
+
+        .github-corner {
+            background-color: #1e293b;
+            border: 1px solid var(--border);
+        }
+        .github-corner:hover {
+            background-color: #334155;
+        }
+
+        .top-btn svg {
+            width: 18px;
+            height: 18px;
+            fill: currentColor;
+        }
+
+        header {
+            background-color: var(--card-bg);
+            color: white;
+            padding: 25px 20px;
+            border-radius: 12px;
+            text-align: center;
+            margin-bottom: 25px;
+            border: 1px solid var(--border);
+            border-bottom: 5px solid var(--utica-orange);
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5);
+        }
+
+        header h1 {
+            margin: 0 0 5px 0;
+            font-size: 2rem;
+            letter-spacing: 0.5px;
+            color: #ffffff;
+            text-shadow: 0 0 10px rgba(0, 240, 255, 0.2);
+        }
+
+        header h2 {
+            margin: 0 0 5px 0;
+            font-size: 1.1rem;
+            color: var(--utica-orange);
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        header p {
+            margin: 0;
+            color: var(--text-muted);
+            font-size: 0.95rem;
+        }
+
+        /* Jeopardy Board Grid (4 Rows) */
+        .board {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 12px;
+            margin-bottom: 25px;
+        }
+
+        .category-header {
+            background-color: var(--card-bg);
+            color: white;
+            padding: 15px 10px;
+            text-align: center;
+            font-weight: bold;
+            font-size: 0.9rem;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            border-bottom: 3px solid var(--utica-orange);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 50px;
+        }
+
+        .tile {
+            background-color: var(--jeopardy-blue);
+            color: var(--jeopardy-gold);
+            font-size: 1.8rem;
+            font-weight: bold;
+            padding: 25px 10px;
+            text-align: center;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            cursor: pointer;
+            transition: transform 0.1s, background-color 0.2s, box-shadow 0.2s;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+            user-select: none;
+            text-shadow: 0 0 8px rgba(0, 240, 255, 0.4);
+        }
+
+        .tile:hover {
+            background-color: #112544;
+            border-color: var(--jeopardy-gold);
+            transform: scale(1.03);
+            box-shadow: 0 0 15px rgba(0, 240, 255, 0.3);
+        }
+
+        .tile.used {
+            background-color: #1e293b;
+            color: #475569;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+            text-shadow: none;
+            border-color: #0f172a;
+        }
+
+        /* Hackathon Style Leaderboard Container (Compact for 8+ teams per line) */
+        .leaderboard-section {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 15px 20px;
+            margin-top: 30px;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5);
+        }
+
+        .leaderboard-section h3 {
+            margin-top: 0;
+            color: var(--jeopardy-gold);
+            font-size: 1.1rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            border-bottom: 2px solid var(--border);
+            padding-bottom: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .leaderboard-grid {
+            display: grid;
+            grid-template-columns: repeat(8, 1fr);
+            gap: 8px;
+            margin-top: 12px;
+        }
+
+        .leaderboard-card {
+            background-color: #040812;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 8px 10px;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.2s, border-color 0.2s;
+        }
+
+        .leaderboard-card.rank-1 {
+            border-color: #ffd700;
+            box-shadow: 0 0 10px rgba(255, 215, 0, 0.15);
+        }
+
+        .leaderboard-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 4px;
+        }
+
+        .team-name {
+            font-weight: 600;
+            font-size: 0.8rem;
+            color: #ffffff;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 70px;
+        }
+
+        .team-rank {
+            background-color: var(--border);
+            color: var(--text-muted);
+            font-size: 0.65rem;
+            padding: 1px 5px;
+            border-radius: 8px;
+            font-weight: bold;
+        }
+
+        .rank-1 .team-rank {
+            background-color: #ffd700;
+            color: #000000;
+        }
+
+        .team-score {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #34d399;
+        }
+
+        /* Setup Panel / Tab Styles (Collapsible at bottom) */
+        .setup-panel {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 20px;
+            margin-top: 25px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+            display: none; /* Hidden by default */
+        }
+
+        .setup-panel.show {
+            display: block;
+        }
+
+        .setup-panel h3 {
+            margin-top: 0;
+            color: var(--jeopardy-gold);
+            font-size: 1.2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .team-input-row {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 12px;
+        }
+
+        .team-input-row input {
+            flex: 1;
+            background-color: #040812;
+            border: 1px solid var(--border);
+            color: var(--text-main);
+            padding: 10px 15px;
+            border-radius: 8px;
+            font-size: 1rem;
+        }
+
+        .team-input-row input:focus {
+            outline: none;
+            border-color: var(--jeopardy-gold);
+        }
+
+        .team-chips-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .team-chip {
+            background-color: #112544;
+            border: 1px solid var(--border);
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .team-chip button {
+            background: none;
+            border: none;
+            color: #f87171;
+            cursor: pointer;
+            font-weight: bold;
+            padding: 0;
+            font-size: 1rem;
+        }
+        .team-chip button:hover {
+            background: none;
+            color: #ef4444;
+        }
+
+        /* Modal Overlay */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(4, 8, 18, 0.85);
+            backdrop-filter: blur(5px);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        .modal-content {
+            background-color: var(--card-bg);
+            color: var(--text-main);
+            padding: 35px;
+            border-radius: 12px;
+            max-width: 750px;
+            width: 100%;
+            text-align: center;
+            border: 1px solid var(--border);
+            border-top: 8px solid var(--utica-orange);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5);
+            animation: modalPop 0.2s ease-out;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        @keyframes modalPop {
+            0% { transform: scale(0.9); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        .modal-category {
+            font-size: 1rem;
+            text-transform: uppercase;
+            color: var(--utica-orange);
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .modal-value {
+            font-size: 1.4rem;
+            color: var(--jeopardy-gold);
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+
+        .modal-question {
+            font-size: 1.3rem;
+            color: var(--text-main);
+            margin-bottom: 15px;
+            line-height: 1.4;
+        }
+
+        .question-image {
+            max-width: 320px;
+            width: 100%;
+            height: auto;
+            border-radius: 8px;
+            margin: 10px auto 20px auto;
+            display: block;
+            border: 1px solid var(--border);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .modal-answer-container {
+            display: none;
+            margin-bottom: 25px;
+            background: rgba(15, 23, 42, 0.7);
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+        }
+
+        .modal-answer-label {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            margin-bottom: 3px;
+            font-weight: bold;
+        }
+
+        .modal-answer {
+            font-size: 1.15rem;
+            color: #34d399;
+            font-weight: bold;
+        }
+
+        /* Award Points Section inside Modal */
+        .award-section {
+            display: none;
+            margin-top: 20px;
+            border-top: 1px solid var(--border);
+            padding-top: 15px;
+            text-align: left;
+        }
+
+        .award-section h4 {
+            margin: 0 0 10px 0;
+            font-size: 0.95rem;
+            color: var(--jeopardy-gold);
+            text-transform: uppercase;
+        }
+
+        .award-buttons-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .award-btn {
+            background-color: #112544;
+            border: 1px solid var(--border);
+            color: white;
+            padding: 6px 12px;
+            font-size: 0.85rem;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .award-btn:hover {
+            background-color: #1d4ed8;
+            border-color: #3b82f6;
+        }
+
+        .modal-controls {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 25px;
+        }
+
+        button {
+            background-color: var(--utica-orange);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            font-size: 1rem;
+            font-weight: 600;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        button:hover {
+            background-color: #c44500;
+        }
+
+        button.secondary {
+            background-color: #1e293b;
+            border: 1px solid var(--border);
+        }
+        button.secondary:hover {
+            background-color: #334155;
+        }
+
+        @media (max-width: 1024px) {
+            .leaderboard-grid {
+                grid-template-columns: repeat(4, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .board {
+                grid-template-columns: repeat(1, 1fr);
+            }
+            .tile {
+                font-size: 1.2rem;
+                padding: 15px;
+            }
+            .top-controls {
+                position: relative;
+                margin-bottom: 15px;
+                justify-content: center;
+                flex-wrap: wrap;
+            }
+            .leaderboard-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+    </style>
+</head>
+<body>
+
+<!-- Left Side Image Banner (Using your provided photos) -->
+<div class="side-banner left-banner">
+    <img src="cyberrange.jpg" alt="Cyber Range Ribbon Cutting">
+    <img src="IMG_2693.jpg" alt="Utica Cybersecurity Students">
+    <img src="IMG_0626.jpg" alt="CTF Competition Action">
+    <img src="IMG_0635.jpg" alt="Faculty Presentation">
+</div>
+
+<!-- Right Side Image Banner (Using your provided photos) -->
+<div class="side-banner right-banner">
+    <img src="scoreboard.jpg" alt="CTF Scoreboard">
+    <img src="john.jpg" alt="Hands-on Cabling Lab">
+    <img src="IMG_6591.jpg" alt="CyberSEED Team">
+    <img src="IMG_0652.jpg" alt="CTF Winners">
+</div>
+
+<div class="container">
+    <div class="top-controls">
+        <button class="top-btn" onclick="toggleSetupPanel()">⚙️ Toggle Team Setup</button>
+        <a href="https://github.com/securemindorg/Student-Knowledge-Games" target="_blank" class="top-btn github-corner">
+            <svg viewBox="0 0 24 24"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
+            GitHub Repo
+        </a>
+    </div>
+
+    <header>
+        <h2>Utica University Open House</h2>
+        <h1>Cybersecurity Undergraduate Jeopardy</h1>
+        <p>School of Business and Justice Studies • National Center of Academic Excellence</p>
+    </header>
+
+    <!-- Jeopardy Board -->
+    <div class="board" id="jeopardy-board">
+        <!-- Categories generated by JS -->
+    </div>
+
+    <!-- Hackathon Leaderboard Visualization (Compact for 8+ teams per line) -->
+    <div class="leaderboard-section">
+        <h3>Live Standings <span style="font-size: 0.8rem; color: var(--text-muted);">Hackathon Scoreboard</span></h3>
+        <div class="leaderboard-grid" id="leaderboard-grid">
+            <!-- Dynamic leaderboard cards render here -->
+        </div>
+    </div>
+
+    <!-- Setup Panel / Tab (Collapsible at bottom) -->
+    <div class="setup-panel" id="setup-panel">
+        <h3>Team Setup Panel <span style="font-size: 0.8rem; color: var(--text-muted); font-weight: normal;">Add participating teams or student groups</span></h3>
+        <div class="team-input-row">
+            <input type="text" id="new-team-input" placeholder="Enter team name (e.g. Cyber Pioneers)..." onkeypress="handleTeamKeyPress(event)">
+            <button onclick="addTeam()">Add Team</button>
+        </div>
+        <div class="team-chips-container" id="team-chips-container">
+            <!-- Dynamic team chips render here -->
+        </div>
+    </div>
+</div>
+
+<!-- Question Modal -->
+<div class="modal" id="question-modal">
+    <div class="modal-content">
+        <div class="modal-category" id="m-category">Category</div>
+        <div class="modal-value" id="m-value">$100</div>
+        <div class="modal-question" id="m-question">Question text goes here...</div>
+
+        <!-- Image Container for Visualizations -->
+        <div id="image-container"></div>
+
+        <div class="modal-answer-container" id="m-answer-container">
+            <div class="modal-answer-label">Correct Answer:</div>
+            <div class="modal-answer" id="m-answer">Answer text goes here...</div>
+
+            <!-- Award Points Section -->
+            <div class="award-section" id="award-section">
+                <h4>Award Points to Team:</h4>
+                <div class="award-buttons-grid" id="award-buttons-grid">
+                    <!-- Dynamic team score buttons render here -->
+                </div>
+            </div>
+        </div>
+
+        <div class="modal-controls">
+            <button id="btn-reveal" onclick="revealAnswer()">Show Answer</button>
+            <button class="secondary" onclick="closeModal()">Close / Return to Board</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    // State management for teams and scores
+    let teams = [
+        { id: 1, name: "Alpha", score: 0 },
+        { id: 2, name: "Bravo", score: 0 },
+        { id: 3, name: "Charlie", score: 0 },
+        { id: 4, name: "Delta", score: 0 },
+        { id: 5, name: "Echo", score: 0 },
+        { id: 6, name: "Foxtrot", score: 0 },
+        { id: 7, name: "Golf", score: 0 },
+        { id: 8, name: "Hotel", score: 0 }
+    ];
+
+    // Visual Graphic for CIA Triad (Col 2, Q100)
+    const ciaTriadImg = "data:image/svg+xml;base64," + btoa(
+        '<svg xmlns="http://www.w3.org/2000/svg" width="300" height="150" viewBox="0 0 300 150">' +
+        '<rect width="300" height="150" fill="#0c162d" rx="8"/>' +
+        '<polygon points="150,25 240,120 60,120" fill="none" stroke="#00f0ff" stroke-width="2"/>' +
+        '<circle cx="150" cy="72" r="35" fill="#E65300" opacity="0.8"/>' +
+        '<text x="150" y="68" font-family="sans-serif" font-size="11" fill="#ffffff" font-weight="bold" text-anchor="middle">CIA</text>' +
+        '<text x="150" y="83" font-family="sans-serif" font-size="11" fill="#ffffff" font-weight="bold" text-anchor="middle">TRIAD</text>' +
+        '<text x="150" y="18" font-family="sans-serif" font-size="11" fill="#00f0ff" font-weight="bold" text-anchor="middle">Confidentiality</text>' +
+        '<text x="22" y="138" font-family="sans-serif" font-size="11" fill="#00f0ff" font-weight="bold">Integrity</text>' +
+        '<text x="210" y="138" font-family="sans-serif" font-size="11" fill="#00f0ff" font-weight="bold">Availability</text>' +
+        '</svg>'
+    );
+
+    // Visual Graphic for Cyber Range (Col 1, Q300)
+    const cyberRangeImg = "data:image/svg+xml;base64," + btoa(
+        '<svg xmlns="http://www.w3.org/2000/svg" width="300" height="150" viewBox="0 0 300 150">' +
+        '<rect width="300" height="150" fill="#0c162d" rx="8"/>' +
+        '<rect x="40" y="30" width="220" height="90" rx="6" fill="#112544" stroke="#00f0ff" stroke-width="1.5"/>' +
+        '<text x="150" y="58" font-family="sans-serif" font-size="13" fill="#E65300" font-weight="bold" text-anchor="middle">RangeForce & Cyberbit</text>' +
+        '<text x="150" y="82" font-family="sans-serif" font-size="11" fill="#f1f5f9" text-anchor="middle">ANAB Accredited Pathways</text>' +
+        '<text x="150" y="102" font-family="sans-serif" font-size="10" fill="#94a3b8" text-anchor="middle">Live Attack & Defense Simulations</text>' +
+        '</svg>'
+    );
+
+    const gameData = [
+        {
+            category: "Utica Offerings & Perks",
+            questions: [
+                {
+                    value: 100,
+                    q: "This cost-saving Utica University initiative ensures undergraduate students receive all required textbooks and course materials before classes start.",
+                    a: "What is the Utica University Book Bundle (All Access program)?"
+                },
+                {
+                    value: 200,
+                    q: "Prospective students who complete this multi-step campus visit—meeting financial aid, taking an admissions tour, and attending an academic event—qualify for this special discount.",
+                    a: "What is the $2,500 campus visit and academic event discount?"
+                },
+                {
+                    value: 300,
+                    q: "Cybersecurity students get access to this immersive training platform supporting credentials aligned with ANAB accreditation across specialized learning pathways.",
+                    a: "What is RangeForce by Cyberbit?",
+                },
+                {
+                    value: 400,
+                    q: "This student-led campus organization gives cybersecurity majors the opportunity to collaborate on CTF (Capture the Flag) competitions and ethical hacking projects.",
+                    a: "What is the Utica University Cyber Club?"
+                }
+            ]
+        },
+        {
+            category: "Cyber Foundations",
+            questions: [
+                {
+                    value: 100,
+                    q: "What core foundational concepts do the letters in the 'CIA Triad' stand for?",
+                    a: "What are Confidentiality, Integrity, and Availability?",
+                    image: ciaTriadImg
+                },
+                {
+                    value: 200,
+                    q: "This security principle restricts user access strictly to what is necessary to perform their specific job functions.",
+                    a: "What is the Principle of Least Privilege?"
+                },
+                {
+                    value: 300,
+                    q: "This type of authentication requires two or more verification factors, such as a password combined with a text code or hardware token.",
+                    a: "What is Multi-Factor Authentication (MFA)?"
+                },
+                {
+                    value: 400,
+                    q: "This foundational cryptographic process converts plain, readable text into unreadable ciphertext to protect data at rest or in transit.",
+                    a: "What is Encryption?"
+                }
+            ]
+        },
+        {
+            category: "Tools & Tech",
+            questions: [
+                {
+                    value: 100,
+                    q: "This popular open-source Linux distribution is pre-loaded with hundreds of specialized penetration testing and security auditing tools.",
+                    a: "What is Kali Linux?"
+                },
+                {
+                    value: 200,
+                    q: "This packet analysis tool allows security analysts to capture, filter, and inspect network traffic down to the individual packet level in real-time.",
+                    a: "What is Wireshark?"
+                },
+                {
+                    value: 300,
+                    q: "Software that creates simulated computing environments, allowing cybersecurity students to safely run multiple operating systems on a single physical machine.",
+                    a: "What is a Virtual Machine (or Hypervisor)?"
+                },
+                {
+                    value: 400,
+                    q: "This fundamental network command-line utility is used to test reachability and network connectivity between a host and a target destination.",
+                    a: "What is Ping?"
+                }
+            ]
+        },
+        {
+            category: "Hacking & Defense",
+            questions: [
+                {
+                    value: 100,
+                    q: "This deceptive email tactic tricks unsuspecting users into revealing credentials, downloading malware, or clicking malicious links.",
+                    a: "What is Phishing?"
+                },
+                {
+                    value: 200,
+                    q: "This destructive type of malware locks or encrypts a victim's critical files until a financial payment or ransom is paid.",
+                    a: "What is Ransomware?"
+                },
+                {
+                    value: 300,
+                    q: "In cybersecurity roles, professionals who practice offensive security and legally break into systems to find vulnerabilities are known as this team.",
+                    a: "What is the Red Team?"
+                },
+                {
+                    value: 400,
+                    q: "This network security device monitors incoming and outgoing traffic, permitting or blocking data packets based on a defined set of security rules.",
+                    a: "What is a Firewall?"
+                }
+            ]
+        },
+        {
+            category: "Utica Cyber Excellence",
+            questions: [
+                {
+                    value: 100,
+                    q: "Utica University was recognized early as a National Center of Academic Excellence (NCAE) by this federal agency.",
+                    a: "Who is the National Security Agency (NSA)?"
+                },
+                {
+                    value: 200,
+                    q: "Utica’s Cybersecurity Board of Advisors includes a number of companies from various industries and is chaired by.",
+                    a: "Who is Alumni (2000) Dan Kalil representing Assured Information Security (AIS) in Rome NY, located just feet from the Air Force Research Lab?"
+                },
+                {
+                    value: 300,
+                    q: "Utica University offers undergraduate cyber degrees with specializations in fields like Cyber Operations, Cybercrime & Fraud Investigation, and this forensics field.",
+                    a: "What is Digital Forensics and Incident Response?"
+                },
+                {
+                    value: 400,
+                    q: "As an academic partner with this major IT association, Utica's curriculum helps prepare students for certifications like Security+, Network+, and A+.",
+                    a: "What is CompTIA?"
+                }
+            ]
+        }
+    ];
+
+    const boardEl = document.getElementById('jeopardy-board');
+    const modalEl = document.getElementById('question-modal');
+    const mCategory = document.getElementById('m-category');
+    const mValue = document.getElementById('m-value');
+    const mQuestion = document.getElementById('m-question');
+    const imageContainer = document.getElementById('image-container');
+    const mAnswerContainer = document.getElementById('m-answer-container');
+    const mAnswer = document.getElementById('m-answer');
+    const btnReveal = document.getElementById('btn-reveal');
+    const awardSection = document.getElementById('award-section');
+    const awardButtonsGrid = document.getElementById('award-buttons-grid');
+    const teamChipsContainer = document.getElementById('team-chips-container');
+    const leaderboardGrid = document.getElementById('leaderboard-grid');
+    const newTeamInput = document.getElementById('new-team-input');
+    const setupPanel = document.getElementById('setup-panel');
+
+    let currentTile = null;
+    let currentQuestionValue = 0;
+
+    function toggleSetupPanel() {
+        setupPanel.classList.toggle('show');
+    }
+
+    // Team management functions
+    function renderTeamsUI() {
+        // Render chips in setup panel
+        teamChipsContainer.innerHTML = '';
+        if (teams.length === 0) {
+            teamChipsContainer.innerHTML = '<span style="color: var(--text-muted); font-size: 0.9rem;">No teams added yet. Add at least one team above.</span>';
+        } else {
+            teams.forEach(team => {
+                const chip = document.createElement('div');
+                chip.className = 'team-chip';
+                chip.innerHTML = `${team.name} <button onclick="removeTeam(${team.id})">&times;</button>`;
+                teamChipsContainer.appendChild(chip);
+            });
+        }
+
+        // Render Leaderboard (sorted by score descending)
+        leaderboardGrid.innerHTML = '';
+        const sortedTeams = [...teams].sort((a, b) => b.score - a.score);
+
+        sortedTeams.forEach((team, index) => {
+            const card = document.createElement('div');
+            card.className = `leaderboard-card ${index === 0 && team.score > 0 ? 'rank-1' : ''}`;
+            card.innerHTML = `
+                <div class="leaderboard-card-header">
+                    <span class="team-name" title="${team.name}">${team.name}</span>
+                    <span class="team-rank">#${index + 1}</span>
+                </div>
+                <div class="team-score">$${team.score}</div>
+            `;
+            leaderboardGrid.appendChild(card);
+        });
+
+        // Render Award buttons inside the modal answer section
+        awardButtonsGrid.innerHTML = '';
+        if (teams.length === 0) {
+            awardButtonsGrid.innerHTML = '<span style="color: var(--text-muted); font-size: 0.85rem;">Please add teams in the setup panel first (click "Toggle Team Setup" above).</span>';
+        } else {
+            teams.forEach(team => {
+                const btn = document.createElement('button');
+                btn.className = 'award-btn';
+                btn.innerText = `+ $${currentQuestionValue} to ${team.name}`;
+                btn.onclick = () => adjustScore(team.id, currentQuestionValue);
+                awardButtonsGrid.appendChild(btn);
+
+                const subBtn = document.createElement('button');
+                subBtn.className = 'award-btn';
+                subBtn.style.backgroundColor = '#2a1215';
+                subBtn.style.borderColor = '#7f1d1d';
+                subBtn.innerText = `- $${currentQuestionValue} to ${team.name}`;
+                subBtn.onclick = () => adjustScore(team.id, -currentQuestionValue);
+                awardButtonsGrid.appendChild(subBtn);
+            });
+        }
+    }
+
+    function addTeam() {
+        const name = newTeamInput.value.trim();
+        if (!name) return;
+        const newId = teams.length > 0 ? Math.max(...teams.map(t => t.id)) + 1 : 1;
+        teams.push({ id: newId, name: name, score: 0 });
+        newTeamInput.value = '';
+        renderTeamsUI();
+    }
+
+    function handleTeamKeyPress(e) {
+        if (e.key === 'Enter') {
+            addTeam();
+        }
+    }
+
+    function removeTeam(id) {
+        teams = teams.filter(t => t.id !== id);
+        renderTeamsUI();
+    }
+
+    function adjustScore(teamId, amount) {
+        const team = teams.find(t => t.id === teamId);
+        if (team) {
+            team.score += amount;
+            renderTeamsUI();
+            closeModal();
+        }
+    }
+
+    function buildBoard() {
+        boardEl.innerHTML = '';
+
+        gameData.forEach(col => {
+            const header = document.createElement('div');
+            header.className = 'category-header';
+            header.innerText = col.category;
+            boardEl.appendChild(header);
+        });
+
+        for (let rowIndex = 0; rowIndex < 4; rowIndex++) {
+            gameData.forEach((col, colIndex) => {
+                const qData = col.questions[rowIndex];
+                const tile = document.createElement('div');
+                tile.className = 'tile';
+                tile.innerText = `$${qData.value}`;
+                tile.dataset.col = colIndex;
+                tile.dataset.row = rowIndex;
+
+                tile.onclick = () => openQuestion(colIndex, rowIndex, tile);
+                boardEl.appendChild(tile);
+            });
+        }
+    }
+
+    function openQuestion(colIndex, rowIndex, tile) {
+        if (tile.classList.contains('used')) return;
+
+        currentTile = tile;
+        const qData = gameData[colIndex].questions[rowIndex];
+        currentQuestionValue = qData.value;
+
+        mCategory.innerText = gameData[colIndex].category;
+        mValue.innerText = `$${qData.value}`;
+        mQuestion.innerText = qData.q;
+        mAnswer.innerText = qData.a;
+
+        // Render Base64 image reliably if available
+        if (qData.image) {
+            imageContainer.innerHTML = `<img src="${qData.image}" class="question-image" alt="Cybersecurity Visual Graphic">`;
+            imageContainer.style.display = 'block';
+        } else {
+            imageContainer.innerHTML = '';
+            imageContainer.style.display = 'none';
+        }
+
+        mAnswerContainer.style.display = 'none';
+        awardSection.style.display = 'none';
+        btnReveal.style.display = 'inline-block';
+        modalEl.style.display = 'flex';
+        renderTeamsUI(); // Refresh buttons with current question value
+    }
+
+    function revealAnswer() {
+        mAnswerContainer.style.display = 'block';
+        awardSection.style.display = 'block';
+        btnReveal.style.display = 'none';
+    }
+
+    function closeModal() {
+        modalEl.style.display = 'none';
+        if (currentTile) {
+            currentTile.classList.add('used');
+            currentTile.innerText = '—';
+        }
+    }
+
+    // Initialize board and teams on load
+    buildBoard();
+    renderTeamsUI();
+</script>
+
+</body>
+</html>
